@@ -26,7 +26,7 @@ export function ArticleParamsForm({
 	setStateArticle,
 	formChange,
 }: ArticleParamsFormProps) {
-	const [isOpen, setIsOpen] = useState<boolean>(false);
+	const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
 	const [selectedStateArticle, setSelectedStateArticle] =
 		useState<ArticleStateType>(stateArticle);
 	const containerRef = useRef<HTMLDivElement>(null);
@@ -57,15 +57,13 @@ export function ArticleParamsForm({
 			containerRef.current &&
 			!containerRef.current.contains(event.target as Node)
 		) {
-			setIsOpen(false);
+			setIsMenuOpen(false);
 		}
 	};
 
 	useEffect(() => {
 		document.addEventListener('mousedown', handleClickOutside);
-		return () => {
-			document.removeEventListener('mousedown', handleClickOutside);
-		};
+		if (!isMenuOpen) return;
 	}, []);
 
 	const renderSelect = (
@@ -85,10 +83,13 @@ export function ArticleParamsForm({
 
 	return (
 		<>
-			<ArrowButton isOpen={isOpen} onClick={() => setIsOpen(!isOpen)} />
+			<ArrowButton
+				isOpen={isMenuOpen}
+				onClick={() => setIsMenuOpen(!isMenuOpen)}
+			/>
 			<aside
 				ref={containerRef}
-				className={clsx(styles.container, isOpen && styles.container_open)}>
+				className={clsx(styles.container, isMenuOpen && styles.container_open)}>
 				<form
 					className={styles.form}
 					onSubmit={handleSubmitState}
