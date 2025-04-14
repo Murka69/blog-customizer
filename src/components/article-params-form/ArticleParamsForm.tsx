@@ -62,9 +62,12 @@ export function ArticleParamsForm({
 	};
 
 	useEffect(() => {
-		document.addEventListener('mousedown', handleClickOutside);
 		if (!isMenuOpen) return;
-	}, []);
+		document.addEventListener('mousedown', handleClickOutside);
+		return () => {
+			document.removeEventListener('mousedown', handleClickOutside);
+		};
+	}, [isMenuOpen]);
 
 	const renderSelect = (
 		key: keyof ArticleStateType,
